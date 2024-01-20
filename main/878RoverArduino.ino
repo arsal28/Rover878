@@ -29,9 +29,20 @@ int changeVal;
 
 void loop() {
   changeVal = map(analogRead(analogIpt), 0, 1023, 0, 100);
-  Serial.print("Detected value: "+ changeVal)
+  Serial.print("Detected value: "+ changeVal);
+  controlDir();
 }
 
 void controlDir(){
-  
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+  delay(5000);
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
 }
