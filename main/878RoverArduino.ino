@@ -27,7 +27,6 @@ void setup() {
 
 int changeVal;
 
-
 void controlDir(){
   analogWrite(enableA, 255);
   analogWrite(enableB, 255);
@@ -64,5 +63,5 @@ void controlDir(){
 void loop() {
   changeVal = map(analogRead(analogIpt), 0, 1023, 0, 100);
   Serial.print("Detected value: "+ changeVal);
-  controlDir();
 }
+
