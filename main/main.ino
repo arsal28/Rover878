@@ -1,5 +1,4 @@
 const int IN_A0 = A0; // analog input
-const int IN_D0 = 7; // digital input
 
 void setup() {
   pinMode (IN_A0, INPUT);
@@ -8,12 +7,9 @@ void setup() {
 }
 
 int value_A0;
-bool value_D0;
 
 void loop() {
-
   value_A0 = analogRead(IN_A0); // reads the analog input from the IR distance sensor
-  value_D0 = digitalRead(IN_D0);// reads the digital input from the IR distance sensor
   Serial.print(value_A0);
   Serial.print(" ");
   Serial.println(value_D0);
