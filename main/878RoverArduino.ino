@@ -27,13 +27,11 @@ void setup() {
 
 int changeVal;
 
-void loop() {
-  changeVal = map(analogRead(analogIpt), 0, 1023, 0, 100);
-  Serial.print("Detected value: "+ changeVal);
-  controlDir();
-}
 
 void controlDir(){
+  analogWrite(enableA, 255);
+  analogWrite(enableB, 255);
+
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
@@ -42,7 +40,29 @@ void controlDir(){
   delay(5000);
 
   digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+
+  delay(5000);
+
+  digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
+
+  delay(5000);
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+
+  delay(5000);
+}
+
+void loop() {
+  changeVal = map(analogRead(analogIpt), 0, 1023, 0, 100);
+  Serial.print("Detected value: "+ changeVal);
+  controlDir();
 }
