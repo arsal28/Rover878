@@ -1,18 +1,21 @@
 const int IN_A0 = A0;  // infrared input left side
 const int IN_A1 = A1;  // infrared input RIGHT side
-const int threshold = 500;
+const int trigPin = 12;
+const int echoPin = 13;
+const int IRThreshold = 80;
+const int USThreshold = 20;
 
 const int speed = 255;
 
 // Motor A pins
 const int enableA = 11;
-const int IN1 = 9;
-const int IN2 = 8;
+const int IN1 = 9; // forward
+const int IN2 = 8; // reverse
 
 // Motor B pins
 const int enableB = 10;
-const int IN3 = 7;
-const int IN4 = 6;
+const int IN3 = 7; // forward
+const int IN4 = 6; // reverse
 
 void controlDir();
 
@@ -21,6 +24,8 @@ void setup() {
   pinMode(analogIpt1, INPUT);
   pinMode(enableA, OUTPUT);
   pinMode(enableB, OUTPUT);
+  pinMode(trigPin, INPUT);
+  pinMode(echoPin, OUTPUT);
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
@@ -36,6 +41,16 @@ void setup() {
 }
 
 int changeVal;
+
+void ultrasonicReading(){
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(3);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  int duration = pulseln(echoPin, HIGH);
+  int distance = (duration * 0.0343) / 2;
+  return distance
+}
 
 void loop() {
   value_A0 = analogRead(IN_A0);
