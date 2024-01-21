@@ -23,28 +23,26 @@ void setup() {
   // Initialize pin mode
   pinMode(IN_A0, INPUT);
   pinMode(IN_A1, INPUT);
-  pinMode(trigPin, INPUT);
-
-  motors.setSpeed(10);
-
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   Serial.begin(9600);
 }
 
 int changeVal;
 
 void ultrasonicReading(){
-  pinMode(echoPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(5);
   digitalWrite(trigPin, LOW);
   float duration = pulseIn(echoPin, HIGH);
-  float distance = (duration / 58);
-  reading = distance;
+  reading = duration;
 }
 
 void loop() {
+
   int IR_A0 = analogRead(IN_A0);
   int IR_A1 = analogRead(IN_A1);
 
@@ -59,15 +57,15 @@ void loop() {
   motors.backwardA();
   motors.backwardB();
 
-  // if (IR_A0 >= IRThreshold) {
-  //   motors.stopB(); // Stops left motor
-  //   motors.forwardA(); // Move right
-  // }
+  if (IR_A0 >= IRThreshold) {
+     motors.stopB(); // Stops left motor
+     motors.forwardA(); // Move right
+  }
 
-  // if (IR_A1 >= IRThreshold) {
-  //   motors.stopA(); // Stops right motor
-  //   motors.forwardB(); // Move left
-  // }
+  if (IR_A1 >= IRThreshold) {
+    motors.stopA(); // Stops right motor
+    motors.forwardB(); // Move left
+  }
 }
 
 void moveLeft(){
