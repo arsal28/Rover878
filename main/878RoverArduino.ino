@@ -1,7 +1,6 @@
 const int IN_A0 = A0;  // infrared input left side
 const int IN_A1 = A1;  // infrared input RIGHT side
 
-const int IR_threshold; // *need to determine threshold
 const int trigPin = 12;
 const int echoPin = 13;
 const int IRThreshold = 80;
