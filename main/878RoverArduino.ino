@@ -22,7 +22,8 @@ void controlDir();
 
 void setup() {
   // Initialize pin mode
-  pinMode(analogIpt1, INPUT);
+  pinMode(IN_A0, INPUT);
+  pinMode(IN_A1, INPUT);
   pinMode(enableA, OUTPUT);
   pinMode(enableB, OUTPUT);
   pinMode(trigPin, INPUT);
@@ -48,37 +49,33 @@ void ultrasonicReading(){
   delayMicroseconds(3);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  int duration = pulseln(echoPin, HIGH);
+  int duration = pulseIn(echoPin, HIGH);
   int distance = (duration * 0.0343) / 2;
-  return distance
+  return distance;
 }
 
 void loop() {
-  value_A0 = analogRead(IN_A0);
-  value_A1 = analogRead(IN_A1);
+  int value_A0 = analogRead(IN_A0);
+  int value_A1 = analogRead(IN_A1);
 
-  changeVal = map(analogRead(IN_A0), 0, 1023, 0, 100);
-  Serial.print("Detected value: " + changeVal);
+  int changeVal = map(value_A0, 0, 1023, 0, 100);
+  Serial.println(changeVal);
 
   analogWrite(enableA, speed); 
   analogWrite(enableB, speed); 
 
   // Following-line 
-  followLine(); 
+  followLine(value_A0, value_A1); 
 
   analogWrite(IN1, 180);
   analogWrite(IN2, 0);
   analogWrite(IN3, 180);
   analogWrite(IN4, 0);
 
-  delay(3000);
-
   analogWrite(IN1, 0);
   analogWrite(IN2, 180);
   analogWrite(IN3, 0);
   analogWrite(IN4, 180);
-
-  delay(3000);
 }
 
 void controlDir() {
@@ -100,9 +97,9 @@ void controlDir() {
   delay(2000);
 }
 
-void followLine() {
+void followLine(int firstVal, int secondVal) {
   // turns left if left IR sensor detects line
-  if (value_A0 >= threshold) {
+  if (firstVal >= IRThreshold) {
     analogWrite(IN1, 0);
     analogWrite(IN2, 0);
     analogWrite(IN3, 150);
@@ -110,7 +107,7 @@ void followLine() {
   }
 
   // turns right if right IR sensor detects line
-  if (value_A1 >= threshold) {
+  if (secondVal >= IRThreshold) {
     analogWrite(IN1, 150);
     analogWrite(IN2, 0);
     analogWrite(IN3, 0);
