@@ -3,6 +3,11 @@
 const int IN_A0 = A0;  // infrared input LEFT side
 const int IN_A1 = A1;  // infrared input RIGHT side
 
+const int IN1_A = 9;
+const int IN2_A = 8;
+const int IN1_B = 7;
+const int IN2_B = 6;
+
 const int trigPin = 12;
 const int echoPin = 13;
 const int IRThreshold = 20;
@@ -13,8 +18,6 @@ const int speed = 1000;
 float reading;
 
 L298NX2 motors(IN1_A, IN2_A, IN1_B, IN2_B);
-
-void controlDir();
 
 void setup() {
   // Initialize pin mode
