@@ -1,15 +1,15 @@
 const int IN_A0 = A0;  // infrared input left side
 const int IN_A1 = A1;  // infrared input RIGHT side
-const int threshold = 500;
+const int IR_threshold; // *need to determine threshold
 
 const int speed = 255;
 
-// Motor A pins
+// Motor A (right) pins
 const int enableA = 11;
 const int IN1 = 9;
 const int IN2 = 8;
 
-// Motor B pins
+// Motor B (left) pins
 const int enableB = 10;
 const int IN3 = 7;
 const int IN4 = 6;
@@ -44,23 +44,11 @@ void loop() {
   changeVal = map(analogRead(IN_A0), 0, 1023, 0, 100);
   Serial.print("Detected value: " + changeVal);
 
-  analogWrite(enableA, speed);
-  analogWrite(enableB, speed);
+  analogWrite(enableA, speed); 
+  analogWrite(enableB, speed); 
 
-  // **DONT TOUCH THIS CODE**
-  // if (value_A0 >= threshold) {
-  //   analogWrite(IN1, 0);
-  //   analogWrite(IN2, 0);
-  //   analogWrite(IN3, 0);
-  //   analogWrite(IN4, 0);
-  // }
-
-  // if (value_A1 >= threshold) {
-  //   analogWrite(IN1, 0);
-  //   analogWrite(IN2, 0);
-  //   analogWrite(IN3, 0);
-  //   analogWrite(IN4, 0);
-  // } 
+  // Following-line 
+  followLine(); 
 
   analogWrite(IN1, 180);
   analogWrite(IN2, 0);
@@ -94,4 +82,22 @@ void controlDir() {
   digitalWrite(IN4, HIGH);
 
   delay(2000);
+}
+
+void followLine() {
+  // turns left if left IR sensor detects line
+  if (value_A0 >= threshold) {
+    analogWrite(IN1, 0);
+    analogWrite(IN2, 0);
+    analogWrite(IN3, 150);
+    analogWrite(IN4, 0);
+  }
+
+  // turns right if right IR sensor detects line
+  if (value_A1 >= threshold) {
+    analogWrite(IN1, 150);
+    analogWrite(IN2, 0);
+    analogWrite(IN3, 0);
+    analogWrite(IN4, 0);
+  }
 }
