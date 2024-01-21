@@ -1,12 +1,12 @@
-const int IN_A0 = A0;  // infrared input left side
+const int IN_A0 = A0;  // infrared input LEFT side
 const int IN_A1 = A1;  // infrared input RIGHT side
 
 const int trigPin = 12;
 const int echoPin = 13;
-const int IRThreshold = 80;
+const int IRThreshold = 20;
 const int USThreshold = 20;
 
-const int speed = 255;
+const int speed = 1000;
 
 // Motor A (right) pins
 const int enableA = 11;
@@ -18,6 +18,8 @@ const int enableB = 10;
 const int IN3 = 7; // forward
 const int IN4 = 6; // reverse
 
+float reading;
+
 void controlDir();
 
 void setup() {
@@ -27,12 +29,13 @@ void setup() {
   pinMode(enableA, OUTPUT);
   pinMode(enableB, OUTPUT);
   pinMode(trigPin, INPUT);
-  pinMode(echoPin, OUTPUT);
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
 
+  analogWrite(enableA, speed);
+  analogWrite(enableB, speed);
   // Turn off motors - Initial state
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
@@ -45,43 +48,38 @@ void setup() {
 int changeVal;
 
 void ultrasonicReading(){
+  pinMode(echoPin, OUTPUT);
   digitalWrite(trigPin, LOW);
-  delayMicroseconds(3);
+  delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  int duration = pulseIn(echoPin, HIGH);
-  int distance = (duration * 0.0343) / 2;
-  return distance;
+  delayMicroseconds(5);
+  digitalWrite(trigPin, LOW);
+  float duration = pulseIn(echoPin, HIGH);
+  float distance = (duration / 58);
+  reading = distance;
 }
 
 void loop() {
   int value_A0 = analogRead(IN_A0);
   int value_A1 = analogRead(IN_A1);
 
-  int changeVal = map(value_A0, 0, 1023, 0, 100);
-  Serial.println(changeVal);
+  int changeValA0 = map(value_A0, 0, 1023, 0, 100);
+  int changeValA1 = map(value_A1, 0, 1023, 0, 100);
+  Serial.print(changeValA0);
+  Serial.print(" ");
+  Serial.print(reading);
+  Serial.print(" ");
+  Serial.println(changeValA1);
+  // analogWrite(enableA, speed); 
+  // analogWrite(enableB, speed); 
 
-  analogWrite(enableA, speed); 
-  analogWrite(enableB, speed); 
-
-  // Following-line 
-  followLine(value_A0, value_A1); 
-
-  analogWrite(IN1, 180);
+  analogWrite(IN1, 90);
   analogWrite(IN2, 0);
-  analogWrite(IN3, 180);
+  analogWrite(IN3, 90);
   analogWrite(IN4, 0);
-
-  analogWrite(IN1, 0);
-  analogWrite(IN2, 180);
-  analogWrite(IN3, 0);
-  analogWrite(IN4, 180);
 }
 
 void controlDir() {
-  analogWrite(enableA, speed);
-  analogWrite(enableB, speed);
-
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
@@ -97,20 +95,24 @@ void controlDir() {
   delay(2000);
 }
 
-void followLine(int firstVal, int secondVal) {
-  // turns left if left IR sensor detects line
-  if (firstVal >= IRThreshold) {
-    analogWrite(IN1, 0);
-    analogWrite(IN2, 0);
-    analogWrite(IN3, 150);
-    analogWrite(IN4, 0);
-  }
+void moveLeft(){
+  analogWrite(IN1, 0);
+  analogWrite(IN2, 0);
+  analogWrite(IN3, 180);
+  analogWrite(IN4, 0);
+}
 
-  // turns right if right IR sensor detects line
-  if (secondVal >= IRThreshold) {
-    analogWrite(IN1, 150);
-    analogWrite(IN2, 0);
-    analogWrite(IN3, 0);
-    analogWrite(IN4, 0);
-  }
+void moveRight(){
+  analogWrite(IN1, 180);
+  analogWrite(IN2, 0);
+  analogWrite(IN3, 0);
+  analogWrite(IN4, 0);
+}
+
+void stopMotors(){
+  analogWrite(IN1, 0);
+  analogWrite(IN2, 0);
+  analogWrite(IN3, 0);
+  analogWrite(IN4, 0);
+  
 }
