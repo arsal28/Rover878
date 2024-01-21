@@ -53,8 +53,8 @@ void loop() {
   int IR_A0 = analogRead(IN_A0);
   int IR_A1 = analogRead(IN_A1);
 
-  int changeValA0 = map(value_A0, 0, 1023, 0, 100);
-  int changeValA1 = map(value_A1, 0, 1023, 0, 100);
+  int changeValA0 = map(IR_A0, 0, 1023, 0, 100);
+  int changeValA1 = map(_A1, 0, 1023, 0, 100);
   Serial.print(changeValA0);
   Serial.print(" ");
   Serial.print(reading);
@@ -75,29 +75,4 @@ void loop() {
     motors.stopA(); // Stops right motor
     motors.forwardB(); // Move left
   }
-}
-
-void controlDir() {
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-
-  delay(2000);
-
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-
-  delay(2000);
-}
-
-void moveLeft(){
-  motors.stopA();
-
-}
-
-void moveRight(){
-  motors.stopB();
 }
